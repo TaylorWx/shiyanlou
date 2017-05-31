@@ -1,0 +1,25 @@
+create database mysql_shiyanlou;
+use mysql_shiyanlou;
+
+create table student
+(
+    sid int(10) primary key,
+    sname char(20) not null,
+    gender char(6) not null
+);
+
+create table course
+(
+    cid int(10) primary key,
+    cname char(20) not null
+)
+
+create table mark
+(
+    mid int(10) primary key,
+    sid int(10)
+    cid int(10)
+    score int(10)
+    constraint mark_sid foreign key(sid) references student(sid),
+    constraint mark_cid foreign key(cid) references course(cid)
+);

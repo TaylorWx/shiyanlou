@@ -1,0 +1,19 @@
+        # 看老外的解法，里面对cookie的操作很有启发
+        # http://wiki.pythonchallenge.com/index.php?title=Level17:Main_Page
+import cookielib
+cj = cookielib.CookieJar()
+opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
+......
+request = urllib2.Request('http://www.pythonchallenge.com/pc/def/linkedlist.php?busynothing=12345')
+response = opener.open(request)
+        # 这一步将本次请求和响应对的所有的cookies都放到了变量cookies中
+cookies = cj.make_cookies(response, request) # extract all cookies that this request-response pair added to the jar
+......
+cookie = cookies[0] # from the previous code clock 取第一个名为info的cookie
+cookie.value = 'the flowers are on their way' # 将其值设为要发送的，不必自己转码
+request = urllib2.Request('http://www.pythonchallenge.com/pc/stuff/violin.php')
+        # 使用修改后的cookie
+cj.set_cookie(cookie) # overwrite the current info='whatever' cookie in the jar with the "flowers" cookie
+cj.add_cookie_header(request) # add the Cookie: header to request 将cookies放入请求头部
+print urllib2.urlopen(request).read()
+
